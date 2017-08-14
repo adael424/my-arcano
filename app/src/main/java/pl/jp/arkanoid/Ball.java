@@ -1,16 +1,20 @@
 package pl.jp.arkanoid;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 
-import java.util.Vector;
+import java.util.Iterator;
 
 /**
  * Created by Jakub on 10/06/2017.
  */
 
+/**
+ * Ball class has iformation on the ball, and how it acts according to colisions.
+ */
 public class Ball {
 
     private int color;
@@ -23,6 +27,15 @@ public class Ball {
     float maxForce;
 
 
+    /**
+     * Contructor sets most parameters of the ball, also divides it starting force.
+     * @param centerX
+     * @param centerY
+     * @param radius
+     * @param color
+     * @param startForce
+     * @param maxForce
+     */
     Ball(float centerX, float centerY, float radius, int color, float startForce, float maxForce){
         super();
         this.centerX = centerX;
@@ -36,6 +49,10 @@ public class Ball {
 
     }
 
+    /**
+     * Redraw the ball on the screen.
+     * @param canvas
+     */
     public void  draw(Canvas canvas){
         Paint paint = new Paint();
         paint.setColor(color);
@@ -44,20 +61,27 @@ public class Ball {
 
     }
 
+    /**
+     * Update the ball's position.
+     */
     public void update(){
         centerX += forceX;
         centerY += forceY;
     }
 
-
-    //the ball actually handles the collision effect by itself, it does what it is supposed to, and tells the other object it should behave accordingly
-    //the ball itself is told to do collision by the GamePanel
-    //I created it only for rects as I do not have any other shapes, not counting the ball
-
+    /**
+     * Check if the ball intersects with a rectangle.
+     * @param obstacle - Rect object the collision is checked against
+     * @return
+     */
     public boolean collision(Rect obstacle){
         return obstacle.intersects((int)(centerX - radius), (int)(centerY - radius), (int)(centerX + radius), (int)(centerY + radius));
     }
 
+    /**
+     * Happens when the ball hits something.
+     * @param centerOfObstacle - center o of obstacle to hit occured with
+     */
     public void hit(Point centerOfObstacle){
         if(averageForce<maxForce){
             averageForce+=0.5;
@@ -83,6 +107,9 @@ public class Ball {
         }
     }
 
+    /**
+     * Happens when the ball hits an eastrn or western wall.
+     */
     public void reverseX(){
         if(averageForce < maxForce) {
             averageForce += 0.5;
@@ -90,10 +117,15 @@ public class Ball {
         forceX=-forceX;
     }
 
+    /**
+     * Happens when the ball hits north wall.
+     */
     public void reverseY() {
         if (averageForce < maxForce) {
             averageForce += 0.5;
         }
         forceY = -forceY;
     }
+
+
 }

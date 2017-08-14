@@ -7,6 +7,10 @@ import android.view.SurfaceHolder;
  * Created by Jakub on 10/06/2017.
  */
 
+/**
+ * Klasa rozszerzająca watek, jest odpowiedzialna za pokazywanie elementów na ekranie.
+ * @extends Thread
+ */
 public class GameThread extends Thread {
     public static final int MAX_FPS = 30;
     private double averageFPS;
@@ -14,17 +18,32 @@ public class GameThread extends Thread {
     private GamePanel gamePanel;
     private boolean running;
     public static Canvas canvas;
+    Arkanoid context;
 
+    /**
+     * Set the running param.
+     * @param running
+     */
     public void setRunning(boolean running){
         this.running = running;
     }
-    public GameThread(SurfaceHolder surfaceHolder, GamePanel gamePanel){
+
+    /**
+     * Construct the thread, connect it to the surface it refreshes and game panel it shows.
+     * @param surfaceHolder
+     * @param gamePanel
+     */
+    public GameThread(SurfaceHolder surfaceHolder, GamePanel gamePanel, Arkanoid context){
         super();
         this.surfaceHolder = surfaceHolder;
         this.gamePanel = gamePanel;
+        this.context = context;
     }
 
     @Override
+    /**
+     * Run the thread.
+     */
     public void run(){
         long startTime;
         long timeMilis;
@@ -41,7 +60,8 @@ public class GameThread extends Thread {
                 canvas = this.surfaceHolder.lockCanvas();
                 synchronized(surfaceHolder) {
                     this.gamePanel.update();
-                    this.gamePanel.draw(canvas);
+                    this.gamePanel.draw
+                            (canvas);
                 }
             }
             catch(Exception e){
